@@ -1,3 +1,6 @@
+Quickstart（docker compose）
+How to contribute（指向 docs/CONTRIBUTING.md + Issue #1）
+
 # TikTok Auto Ops (Vietnam) — Affiliate/Direct Supply Automation Stack
 
 A community-built, compliance-first TikTok operations system for **Vietnam (vi-VN)** focused on **3C small digital accessories** (cables, chargers, cases, hubs, screen protectors, etc.).
