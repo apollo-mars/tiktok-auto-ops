@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: tiktok
+      POSTGRES_PASSWORD: tiktok
+      POSTGRES_DB: tiktok_auto_ops
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  api:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./services/api:/app
+    command: bash -lc "npm install && npm run dev"
+    ports:
+      - '3001:3001'
+    environment:
+      DATABASE_URL: postgresql://tiktok:tiktok@db:5432/tiktok_auto_ops
+    depends_on:
+      - db
+  console:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./apps/console:/app
+    command: bash -lc "npm install && npm run dev"
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+  worker:
+    image: python:3.11
+    working_dir: /app
+    volumes:
+      - ./services/worker:/app
+    command: bash -lc "pip install -r requirements.txt && python -m worker"
+    environment:
+      DATABASE_URL: postgresql://tiktok:tiktok@db:5432/tiktok_auto_ops
+    depends_on:
+      - db
+volumes:
+  db_data:
